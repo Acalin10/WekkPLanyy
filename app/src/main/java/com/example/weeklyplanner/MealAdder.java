@@ -46,9 +46,10 @@ public class MealAdder extends AppCompatActivity {
     ArrayList<String> namesToRemove;
     ArrayList<Recipe> allRecipiesStringRecipe;
     ArrayList<String> toRemove;
-    ArrayList<String> existing_names;
+
     ArrayList<String> loadingRemovals;
     File saveWhatToRemove;
+    ArrayList<String> existingNames;
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,13 +91,20 @@ public class MealAdder extends AppCompatActivity {
             }
         }
 
-        allRecipiesStringRecipe = MainScreen.initialise(allRecipiesStringRecipe);
-        for(int i=0;i<allRecipiesString.size();i++){
-            allRecipiesStringRecipe.add(Recipe.toRecipe(allRecipiesString.get(i)));
+
+        existingNames=new ArrayList<>();
+        for(int i = 0; i<allRecipiesString.size();i++){
+            String[] splitting = allRecipiesString.get(i).split(";");
+            existingNames.add(splitting[0]);
         }
-        existing_names=MainScreen.initialise(existing_names);
-        for(int i=0;i<allRecipiesStringRecipe.size();i++){
-            existing_names.add(allRecipiesStringRecipe.get(i).getName());
+        Log.i(String.valueOf(existingNames),"existingNames after splitting");
+        for(int i=0;i<existingNames.size();i++){
+            for(int j=0;j<namesToRemove.size();j++) {
+                if (existingNames.get(i).equals(namesToRemove.get(j))) {
+                    existingNames.remove(i);
+                    allRecipiesString.remove(i);
+                }
+            }
         }
 
         Log.i(String.valueOf(allRecipiesString),"allRecipiesString after removing names that should be removed");
